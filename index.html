@@ -3,78 +3,189 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debate Chit Allocation</title>
+  <title>Debate Side Allocation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 16px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
       min-height: 100vh;
-      margin: 0;
+      padding: 20px;
+      color: var(--dark);
+      line-height: 1.6;
     }
 
     .container {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      width: 90%;
-      max-width: 450px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      width: 100%;
+      max-width: 500px;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
+      transition: var(--transition);
     }
 
-    h2 {
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--gray);
+      margin-bottom: 25px;
+      font-size: 1rem;
+    }
+
+    .input-group {
+      position: relative;
       margin-bottom: 20px;
-      color: #333;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
+      padding: 15px 20px 15px 50px;
+      border: 2px solid var(--light-gray);
+      border-radius: var(--border-radius);
       outline: none;
-      margin-bottom: 15px;
       font-size: 16px;
-      transition: border-color 0.3s;
+      transition: var(--transition);
+      background: white;
     }
 
     input:focus {
-      border-color: #007bff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 18px;
     }
 
     button {
-      background: #007bff;
-      color: #fff;
+      background: var(--primary);
+      color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 12px;
+      padding: 15px 30px;
+      border-radius: var(--border-radius);
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s;
-      margin: 5px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 10px;
     }
 
     button:hover {
-      background: #0056b3;
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     .card {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 16px;
-      background: #f1f3f5;
-      box-shadow: inset 0 4px 10px rgba(0,0,0,0.1);
+      margin-top: 25px;
+      padding: 25px;
+      border-radius: var(--border-radius);
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       animation: fadeIn 0.5s ease-in-out;
+      border-left: 5px solid var(--primary);
+    }
+
+    .card.pro {
+      border-left-color: #4cc9f0;
+    }
+
+    .card.con {
+      border-left-color: #f72585;
+    }
+
+    .card.duplicate {
+      border-left-color: var(--danger);
     }
 
     .card h3 {
       margin-bottom: 15px;
-      color: #444;
+      color: var(--dark);
+      font-size: 1.5rem;
+    }
+
+    .side-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .side-badge.pro {
+      background: rgba(76, 201, 240, 0.2);
+      color: #4cc9f0;
+    }
+
+    .side-badge.con {
+      background: rgba(247, 37, 133, 0.2);
+      color: #f72585;
+    }
+
+    .side-badge.duplicate {
+      background: rgba(247, 37, 133, 0.2);
+      color: var(--danger);
     }
 
     @keyframes fadeIn {
@@ -82,87 +193,256 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Organizer Table */
-    .table-container {
-      display: none; /* Hidden by default */
+    /* Admin Panel */
+    .admin-panel {
+      display: none;
       width: 100%;
-      max-width: 600px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      padding: 20px;
-      margin-top: 20px;
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      margin-top: 30px;
+    }
+
+    .admin-panel h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 15px;
     }
 
     th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--light-gray);
     }
 
     th {
-      background: #007bff;
-      color: #fff;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
     }
 
     tr:hover {
-      background: #f1f3f5;
+      background: rgba(67, 97, 238, 0.05);
     }
 
-    #adminAccess {
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      flex: 1;
+      margin: 0 10px;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    /* Admin Access */
+    .admin-access {
       margin-top: 20px;
+      text-align: center;
+    }
+
+    .admin-toggle {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      width: auto;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    .admin-toggle:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .admin-form {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-top: 15px;
+      box-shadow: var(--box-shadow);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 30px;
+      color: white;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--danger);
+      color: white;
+      padding: 15px 25px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container, .admin-panel {
+        padding: 20px;
+      }
+      
+      .stats {
+        flex-direction: column;
+      }
+      
+      .stat-card {
+        margin: 10px 0;
+      }
+      
+      .toast {
+        left: 20px;
+        right: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Debate Side Allocation</h2>
-    <input type="text" id="teamName" placeholder="Enter Team Name">
-    <button onclick="assignChit()">Get Your Chit</button>
+    <h1>Debate Side Allocation</h1>
+    <p class="subtitle">Enter your team name to receive your debate side</p>
+    
+    <div class="input-group">
+      <i class="fas fa-users input-icon"></i>
+      <input type="text" id="teamName" placeholder="Enter Team Name">
+    </div>
+    
+    <button onclick="assignChit()" id="assignButton">
+      <i class="fas fa-hand-paper"></i> Get Your Side
+    </button>
+    
     <div id="result"></div>
   </div>
 
-  <!-- Organizer Table (hidden by default) -->
-  <div class="table-container" id="adminPanel">
-    <h3>Allocation Overview</h3>
+  <!-- Admin Panel -->
+  <div class="admin-panel" id="adminPanel">
+    <h2><i class="fas fa-tachometer-alt"></i> Allocation Overview</h2>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <h3 id="totalTeams">0</h3>
+        <p>Total Teams</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="proTeams">0</h3>
+        <p>PRO Teams</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="conTeams">0</h3>
+        <p>CON Teams</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="remaining">12</h3>
+        <p>Remaining</p>
+      </div>
+    </div>
+    
     <table id="allocationTable">
       <thead>
         <tr>
           <th>Team Name</th>
           <th>Side</th>
+          <th>Time</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+    
+    <div style="margin-top: 20px; text-align: center;">
+      <button onclick="resetAllocations()" style="background: var(--danger); width: auto;">
+        <i class="fas fa-redo"></i> Reset Allocations
+      </button>
+    </div>
   </div>
 
-  <!-- Hidden Admin Access -->
-  <div id="adminAccess">
-    <input type="password" id="adminKey" placeholder="Enter Admin Key">
-    <button onclick="unlockAdmin()">Unlock Organizer View</button>
+  <!-- Admin Access -->
+  <div class="admin-access">
+    <button class="admin-toggle" onclick="toggleAdminForm()">
+      <i class="fas fa-lock"></i> Organizer Access
+    </button>
+    
+    <div class="admin-form" id="adminForm">
+      <div class="input-group">
+        <i class="fas fa-key input-icon"></i>
+        <input type="password" id="adminKey" placeholder="Enter Admin Key">
+      </div>
+      <button onclick="unlockAdmin()">
+        <i class="fas fa-unlock"></i> Unlock Organizer View
+      </button>
+    </div>
   </div>
 
-  <!-- Common Ninja SDK -->
-  <script src="https://cdn.commoninja.com/sdk/latest/commonninja.js" defer></script>
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <i class="fas fa-exclamation-circle"></i>
+    <span id="toastMessage">This team has already received a side!</span>
+  </div>
+
+  <footer>
+    <p>Debate Side Allocation System &copy; 2023</p>
+  </footer>
 
   <script>
     const totalTeams = 12; // 12 teams
     const SECRET_KEY = "letmein123"; // Change this key
     let pool = [];
+    let allocations = [];
+    let usedTeamNames = new Set(); // Track used team names
 
-    // Fill pool with 6 PRO and 6 CON
-    for (let i = 0; i < totalTeams / 2; i++) {
-      pool.push("pro");
-      pool.push("con");
+    // Initialize pool with 6 PRO and 6 CON
+    function initializePool() {
+      pool = [];
+      for (let i = 0; i < totalTeams / 2; i++) {
+        pool.push("pro");
+        pool.push("con");
+      }
+      // Shuffle randomly
+      pool = pool.sort(() => Math.random() - 0.5);
     }
 
-    // Shuffle randomly
-    pool = pool.sort(() => Math.random() - 0.5);
+    initializePool();
 
     function assignChit() {
       const team = document.getElementById("teamName").value.trim();
@@ -171,45 +451,129 @@
         return;
       }
 
-      if (pool.length === 0) {
-        document.getElementById("result").innerHTML = 
-          `<div class="card"><h3>All chits have been taken!</h3></div>`;
+      // Check if team name has already been used
+      if (usedTeamNames.has(team.toLowerCase())) {
+        showDuplicateMessage(team);
         return;
       }
 
-      const chit = pool.pop();
-      let widgetHtml = chit === "pro" 
-        ? `<div class="commonninja_component pid-430537a0-a8bb-450c-b665-dc9eeffdb111"></div>` 
-        : `<div class="commonninja_component pid-XXXXXXXX-CON-WIDGET-ID"></div>`;
+      if (pool.length === 0) {
+        document.getElementById("result").innerHTML = 
+          `<div class="card"><h3>All sides have been allocated!</h3></div>`;
+        return;
+      }
 
-      document.getElementById("result").innerHTML = `
-        <div class="card">
-          <h3>${team}, you got ${chit.toUpperCase()}!</h3>
-          ${widgetHtml}
-        </div>`;
+      const side = pool.pop();
+      const timestamp = new Date().toLocaleTimeString();
+      
+      // Add to allocations array and used team names set
+      allocations.push({
+        team: team,
+        side: side,
+        time: timestamp
+      });
+      
+      usedTeamNames.add(team.toLowerCase());
+      
+      // Update UI
+      updateResultCard(team, side);
+      updateAdminTable();
+      updateStats();
 
-      // Add to organizer table
-      const tableBody = document.querySelector("#allocationTable tbody");
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${team}</td><td>${chit.toUpperCase()}</td>`;
-      tableBody.appendChild(row);
-
-      // Refresh widget
+      // Refresh widget if needed
       if (window.CommonNinja) window.CommonNinja.parse();
 
       document.getElementById("teamName").value = "";
+    }
+
+    function showDuplicateMessage(team) {
+      // Show toast notification
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+      toastMessage.textContent = `${team} has already received a side!`;
+      toast.classList.add("show");
+      
+      // Show duplicate message in result area
+      document.getElementById("result").innerHTML = `
+        <div class="card duplicate">
+          <div class="side-badge duplicate">DUPLICATE</div>
+          <h3>${team} has already received a side!</h3>
+          <p>Each team can only receive one side allocation.</p>
+        </div>`;
+      
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    function updateResultCard(team, side) {
+      const sideClass = side === "pro" ? "pro" : "con";
+      const sideText = side.toUpperCase();
+      
+      document.getElementById("result").innerHTML = `
+        <div class="card ${sideClass}">
+          <div class="side-badge ${sideClass}">${sideText}</div>
+          <h3>${team}, you are arguing for the ${sideText} side!</h3>
+          <p>Good luck with your debate!</p>
+        </div>`;
+    }
+
+    function updateAdminTable() {
+      const tableBody = document.querySelector("#allocationTable tbody");
+      tableBody.innerHTML = "";
+      
+      allocations.forEach(allocation => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${allocation.team}</td>
+          <td><span class="side-badge ${allocation.side}">${allocation.side.toUpperCase()}</span></td>
+          <td>${allocation.time}</td>`;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateStats() {
+      document.getElementById("totalTeams").textContent = allocations.length;
+      document.getElementById("proTeams").textContent = allocations.filter(a => a.side === "pro").length;
+      document.getElementById("conTeams").textContent = allocations.filter(a => a.side === "con").length;
+      document.getElementById("remaining").textContent = totalTeams - allocations.length;
+    }
+
+    function toggleAdminForm() {
+      const adminForm = document.getElementById("adminForm");
+      adminForm.style.display = adminForm.style.display === "block" ? "none" : "block";
     }
 
     function unlockAdmin() {
       const key = document.getElementById("adminKey").value;
       if (key === SECRET_KEY) {
         document.getElementById("adminPanel").style.display = "block";
-        document.getElementById("adminAccess").style.display = "none"; // hide unlock box
+        document.getElementById("adminForm").style.display = "none";
+        updateStats();
       } else {
         alert("Wrong key! Access denied.");
       }
       document.getElementById("adminKey").value = "";
     }
+
+    function resetAllocations() {
+      if (confirm("Are you sure you want to reset all allocations? This cannot be undone.")) {
+        allocations = [];
+        usedTeamNames.clear();
+        initializePool();
+        updateAdminTable();
+        updateStats();
+        document.getElementById("result").innerHTML = "";
+      }
+    }
+
+    // Add event listener for Enter key
+    document.getElementById("teamName").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        assignChit();
+      }
+    });
   </script>
 </body>
 </html>
